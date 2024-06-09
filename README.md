@@ -19,7 +19,7 @@ This project provides a Solidity smart contract that enables the creation and ma
 Follow these steps to get the project up and running on your local machine.
 
 - Copy the Pish.sol code to Remix IDE
--Compile and deploy the contract
+- Compile and deploy the contract
 - Interact with the deployed contract through transactions like transfers, minting, and burning.
 
 ## Author
