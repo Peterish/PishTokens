@@ -1,48 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-interface IERC20 {    
-    function totalSupply() external view returns(uint);
-    function balanceOf(address account) external view returns(uint);
-    function transfer(address recipient, uint amount) external returns(bool);
-   
-    event Transfer(address indexed from, address indexed to, uint amount);
-}
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Tokens is IERC20 {
-    address public owner;
-    uint public override totalSupply;
-    mapping(address => uint) public override balanceOf;
-    string public name = "PishTokens";
-    string public symbol = "PHKT";
-    uint8 public decimals = 18;
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can mint tokens");
-        _;
+contract PishTokens is ERC20, Ownable {
+    constructor(uint256 initialSupply) ERC20("PishTokens", "PHTK") Ownable(msg.sender) {
+        _mint(msg.sender, initialSupply);
     }
 
-    constructor() {
-        owner = msg.sender;
+    function mint(address to, uint256 amount) external onlyOwner {
+        _mint(to, amount);
     }
 
-    function transfer(address recipient, uint amount) external override returns (bool) {
-        balanceOf[msg.sender] -= amount;
-        balanceOf[recipient] += amount;
-        emit Transfer(msg.sender, recipient, amount);
-        return true;
+    function burn(address from, uint256 amount) external  {
+        _burn(from, amount);
     }
-
-    function mint(uint amount) external onlyOwner {
-        balanceOf[msg.sender] += amount;
-        totalSupply += amount;
-        emit Transfer(address(0), msg.sender, amount);
-    }
-
-    function burn(uint amount) external {
-        balanceOf[msg.sender] -= amount;
-        totalSupply -= amount;
-        emit Transfer(msg.sender, address(0), amount);
-    }
-
 }
